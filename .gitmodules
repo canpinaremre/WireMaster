@@ -1,0 +1,10 @@
+[submodule "libs/glfw"]
+	path = libs/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "libs/imgui"]
+	path = libs/imgui
+	url = https://github.com/ocornut/imgui.git
+	branch = docking
+[submodule "libs/imgui_node_editor"]
+	path = libs/imgui_node_editor
+	url = https://github.com/thedmd/imgui-node-editor.git
