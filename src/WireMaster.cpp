@@ -1,18 +1,12 @@
 #include "WireMaster.h"
 
 
-void WireMaster::draw()
-{
-
-    
-}
-
-
 void WireMaster::OnStart()
 {
     ed::Config config;
     config.SettingsFile = "BasicInteraction.json";
     m_Context = ed::CreateEditor(&config);
+    initAvionics();
 }
 
 void WireMaster::OnStop() 
@@ -45,83 +39,12 @@ void WireMaster::OnFrame(float deltaTime)
     ed::SetCurrentEditor(m_Context);
     // Start interaction with editor.
     ed::Begin("My Editor", ImVec2(0.0, 0.0f));
-    int uniqueId = 1;
-    //
-    // 1) Commit known data to editor
-    //
-    // Submit Node A
-    ed::NodeId nodeA_Id = uniqueId++;
-    ed::PinId  nodeA_InputPinId = uniqueId++;
-    ed::PinId  nodeA_OutputPinId = uniqueId++;
-    ed::PinId  nodeA_InputPinId2 = uniqueId++;
-    if (m_FirstFrame)
-        ed::SetNodePosition(nodeA_Id, ImVec2(0, 0));
-    ed::BeginNode(nodeA_Id);
-        ImGui::Text("Node A");
-        ed::BeginPin(nodeA_InputPinId, ed::PinKind::Input);
-            ImGui::Text("-> In");
-        ed::EndPin();
-        ImGui::SameLine();
-        ed::BeginPin(nodeA_OutputPinId, ed::PinKind::Output);
-            ImGui::Text("Out ->");
-        ed::EndPin();
-        ed::BeginPin(nodeA_InputPinId2, ed::PinKind::Input);
-            ImGui::Text("-> In2");
-        ed::EndPin();
-    ed::EndNode();
-    // Submit Node B
-    ed::NodeId nodeB_Id = uniqueId++;
-    ed::PortId portId = uniqueId++;
-    ed::PortId portId2 = uniqueId++;
-    ed::PinId  nodeB_InputPinId1 = uniqueId++;
-    ed::PinId  nodeB_InputPinId2 = uniqueId++;
-    ed::PinId  nodeB_InputPinId3 = uniqueId++;
-    ed::PinId  nodeB_InputPinId4 = uniqueId++;
-    ed::PinId  nodeB_InputPinId5 = uniqueId++;
-    ed::PinId  nodeB_InputPinId6 = uniqueId++;
-    ed::PinId  nodeB_InputPinId7 = uniqueId++;
-    ed::PinId  nodeB_OutputPinId = uniqueId++;
-    if (m_FirstFrame)
-        ed::SetNodePosition(nodeB_Id, ImVec2(100, 100));
-    ed::BeginNode(nodeB_Id);
-        ImGui::Text("Node B");
-        ImGuiEx_BeginColumn();
-            
-            ed::BeginPin(nodeB_InputPinId1, ed::PinKind::Input);
-            ImGui::Text("-> In1");
-            ed::EndPin();
-            ed::BeginPin(nodeB_InputPinId2, ed::PinKind::Input);
-            ImGui::Text("-> In2");
-            ed::EndPin();
-            ed::BeginPort(portId2, ed::PortKind::Input);
-            ed::BeginPin(nodeB_InputPinId3, ed::PinKind::Input);
-            ImGui::Text("-> In3");
-            ed::EndPin();
-            ed::BeginPin(nodeB_InputPinId4, ed::PinKind::Input);
-            ImGui::Text("-> In4");
-            ed::EndPin();
-            ed::EndPort();
-            ed::BeginPort(portId, ed::PortKind::Input);
-            ed::BeginPin(nodeB_InputPinId5, ed::PinKind::Input);
-            ImGui::Text("-> In5");
-            ed::EndPin();
-            ed::BeginPin(nodeB_InputPinId6, ed::PinKind::Input);
-            ImGui::Text("-> In6");
-            ed::EndPin();
-            ed::BeginPin(nodeB_InputPinId7, ed::PinKind::Input);
-            ImGui::Text("-> In7");
-            ed::EndPin();
-            ed::EndPort();
-            ImGuiEx_NextColumn();
-            ImGui::Text("Deneme");
 
-            ImGuiEx_NextColumn();
-            ed::BeginPin(nodeB_OutputPinId, ed::PinKind::Output);
-            ImGui::Text("Out ->");
-            ed::EndPin();
-            
-        ImGuiEx_EndColumn();
-    ed::EndNode();
+    for (auto &avs : AvionicList) 
+    {
+        avs.Build();
+    }
+
     // Submit Links
     for (auto& linkInfo : m_Links)
         ed::Link(linkInfo.Id, linkInfo.InputId, linkInfo.OutputId);
@@ -194,4 +117,64 @@ void WireMaster::OnFrame(float deltaTime)
     ed::SetCurrentEditor(nullptr);
     m_FirstFrame = false;
     // ImGui::ShowMetricsWindow();
+}
+
+void WireMaster::initAvionics()
+{
+    // DEBUG TEST SETUP
+    // TODO init from file
+
+    //------------------------------------------------
+    Avionic Avionic1(uniqId++, "Avionic1");
+        AvionicPort port1(uniqId++,"port1");
+            AvionicPin pin1(uniqId++,"pin1",PinType::Digital);
+            AvionicPin pin2(uniqId++,"pin2",PinType::PowerPos);
+                port1.AddPin(pin1);
+                port1.AddPin(pin2);
+        AvionicPort port2(uniqId++,"port2",ed::PortKind::Input);
+            AvionicPin pin3(uniqId++,"pin3",PinType::PowerNeg);
+                port2.AddPin(pin3);
+        Avionic1.AddPort(port1);
+        Avionic1.AddPort(port2);
+    //------------------------------------------------
+    Avionic Avionic2(uniqId++, "Avionic2", ImVec2(100, 100));
+        AvionicPort port3(uniqId++,"port3",ed::PortKind::Input);
+            AvionicPin pin4(uniqId++,"pin4",PinType::Digital);
+            AvionicPin pin5(uniqId++,"pin5",PinType::GND);
+                port3.AddPin(pin4);
+                port3.AddPin(pin5);
+        AvionicPort port4(uniqId++,"port4");
+            AvionicPin pin6(uniqId++,"pin6",PinType::Digital);
+            AvionicPin pin7(uniqId++,"pin7",PinType::Digital);
+            AvionicPin pin8(uniqId++,"pin8",PinType::Digital);
+                port4.AddPin(pin6);
+                port4.AddPin(pin7);
+                port4.AddPin(pin8);
+        Avionic2.AddPort(port3);
+        Avionic2.AddPort(port4);
+    //------------------------------------------------
+    Avionic Avionic3(uniqId++, "Avionic3", ImVec2(200, 500));
+        AvionicPort port5(uniqId++,"port5");
+            AvionicPin pin9(uniqId++,"pin9",PinType::Digital);
+            AvionicPin pin10(uniqId++,"pin10",PinType::Digital);
+            AvionicPin pin11(uniqId++,"pin11",PinType::Digital);
+                port5.AddPin(pin9);
+                port5.AddPin(pin10);
+                port5.AddPin(pin11);
+        Avionic3.AddPort(port5);
+    //------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+    AvionicList.push_back(Avionic1);
+    AvionicList.push_back(Avionic2);
+    AvionicList.push_back(Avionic3);
 }

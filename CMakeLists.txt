@@ -15,6 +15,7 @@ include_directories(libs/imgui_node_editor/external/stb_image)
 include_directories(libs/imgui_node_editor/ScopeGuard)
 include_directories(src)
 include_directories(src/Application)
+include_directories(src/Avionic)
 
 
 

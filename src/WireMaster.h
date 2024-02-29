@@ -2,18 +2,18 @@
 # include <imgui_node_editor.h>
 # include <application.h>
 
+#include <Avionic.h>
 
 namespace ed = ax::NodeEditor;
 
 struct WireMaster : public Application
 {
-    void draw();
 
+    int uniqId = 1;
+    std::vector<Avionic> AvionicList;
 
-    // Struct to hold basic information about connection between
-    // pins. Note that connection (aka. link) has its own ID.
-    // This is useful later with dealing with selections, deletion
-    // or other operations.
+    void initAvionics();
+
     struct LinkInfo
     {
         ed::LinkId Id;
