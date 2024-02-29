@@ -55,7 +55,7 @@ void WireMaster::OnFrame(float deltaTime)
     ed::PinId  nodeA_OutputPinId = uniqueId++;
     ed::PinId  nodeA_InputPinId2 = uniqueId++;
     if (m_FirstFrame)
-        ed::SetNodePosition(nodeA_Id, ImVec2(10, 10));
+        ed::SetNodePosition(nodeA_Id, ImVec2(0, 0));
     ed::BeginNode(nodeA_Id);
         ImGui::Text("Node A");
         ed::BeginPin(nodeA_InputPinId, ed::PinKind::Input);
@@ -72,48 +72,48 @@ void WireMaster::OnFrame(float deltaTime)
     // Submit Node B
     ed::NodeId nodeB_Id = uniqueId++;
     ed::PortId portId = uniqueId++;
+    ed::PortId portId2 = uniqueId++;
     ed::PinId  nodeB_InputPinId1 = uniqueId++;
     ed::PinId  nodeB_InputPinId2 = uniqueId++;
     ed::PinId  nodeB_InputPinId3 = uniqueId++;
     ed::PinId  nodeB_InputPinId4 = uniqueId++;
     ed::PinId  nodeB_InputPinId5 = uniqueId++;
     ed::PinId  nodeB_InputPinId6 = uniqueId++;
+    ed::PinId  nodeB_InputPinId7 = uniqueId++;
     ed::PinId  nodeB_OutputPinId = uniqueId++;
     if (m_FirstFrame)
-        ed::SetNodePosition(nodeB_Id, ImVec2(210, 60));
+        ed::SetNodePosition(nodeB_Id, ImVec2(100, 100));
     ed::BeginNode(nodeB_Id);
         ImGui::Text("Node B");
         ImGuiEx_BeginColumn();
-            ed::BeginPort(portId, ed::PortKind::Input);
+            
             ed::BeginPin(nodeB_InputPinId1, ed::PinKind::Input);
             ImGui::Text("-> In1");
             ed::EndPin();
             ed::BeginPin(nodeB_InputPinId2, ed::PinKind::Input);
             ImGui::Text("-> In2");
             ed::EndPin();
+            ed::BeginPort(portId2, ed::PortKind::Input);
+            ed::BeginPin(nodeB_InputPinId3, ed::PinKind::Input);
+            ImGui::Text("-> In3");
+            ed::EndPin();
+            ed::BeginPin(nodeB_InputPinId4, ed::PinKind::Input);
+            ImGui::Text("-> In4");
+            ed::EndPin();
             ed::EndPort();
             ed::BeginPort(portId, ed::PortKind::Input);
-            ed::BeginPin(nodeB_InputPinId3, ed::PinKind::Input);
-                ImGui::Text("-> In3");
+            ed::BeginPin(nodeB_InputPinId5, ed::PinKind::Input);
+            ImGui::Text("-> In5");
+            ed::EndPin();
+            ed::BeginPin(nodeB_InputPinId6, ed::PinKind::Input);
+            ImGui::Text("-> In6");
+            ed::EndPin();
+            ed::BeginPin(nodeB_InputPinId7, ed::PinKind::Input);
+            ImGui::Text("-> In7");
             ed::EndPin();
             ed::EndPort();
-            ed::BeginPin(nodeB_InputPinId4, ed::PinKind::Input);
-                ImGui::Text("-> In4");
-            ed::EndPin();
-        
-            if(ImGui::BeginTable("port3",1,ImGuiTableFlags_BordersOuter | ImGuiTableFlags_SizingStretchProp))
-            {
-                ImGui::TableNextColumn();
-                ed::BeginPin(nodeB_InputPinId5, ed::PinKind::Input);
-                ImGui::Text("-> In5");
-                ed::EndPin();
-                ImGui::TableNextColumn();
-                ed::BeginPin(nodeB_InputPinId6, ed::PinKind::Input);
-                ImGui::Text("-> In6");
-                ed::EndPin();
-                
-                ImGui::EndTable();
-            }
+            ImGuiEx_NextColumn();
+            ImGui::Text("Deneme");
 
             ImGuiEx_NextColumn();
             ed::BeginPin(nodeB_OutputPinId, ed::PinKind::Output);
