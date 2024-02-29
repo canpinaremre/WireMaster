@@ -53,6 +53,7 @@ void WireMaster::OnFrame(float deltaTime)
     ed::NodeId nodeA_Id = uniqueId++;
     ed::PinId  nodeA_InputPinId = uniqueId++;
     ed::PinId  nodeA_OutputPinId = uniqueId++;
+    ed::PinId  nodeA_InputPinId2 = uniqueId++;
     if (m_FirstFrame)
         ed::SetNodePosition(nodeA_Id, ImVec2(10, 10));
     ed::BeginNode(nodeA_Id);
@@ -64,9 +65,13 @@ void WireMaster::OnFrame(float deltaTime)
         ed::BeginPin(nodeA_OutputPinId, ed::PinKind::Output);
             ImGui::Text("Out ->");
         ed::EndPin();
+        ed::BeginPin(nodeA_InputPinId2, ed::PinKind::Input);
+            ImGui::Text("-> In2");
+        ed::EndPin();
     ed::EndNode();
     // Submit Node B
     ed::NodeId nodeB_Id = uniqueId++;
+    ed::PortId portId = uniqueId++;
     ed::PinId  nodeB_InputPinId1 = uniqueId++;
     ed::PinId  nodeB_InputPinId2 = uniqueId++;
     ed::PinId  nodeB_InputPinId3 = uniqueId++;
@@ -79,35 +84,23 @@ void WireMaster::OnFrame(float deltaTime)
     ed::BeginNode(nodeB_Id);
         ImGui::Text("Node B");
         ImGuiEx_BeginColumn();
-
-            ImGui::Text("asdasd");
-
-            ImGui::PushItemWidth(100.0f);
-            if(ImGui::CollapsingHeader("port1"))
-            {
-            
-            
+            ed::BeginPort(portId, ed::PortKind::Input);
             ed::BeginPin(nodeB_InputPinId1, ed::PinKind::Input);
-                ImGui::Text("-> In1");
+            ImGui::Text("-> In1");
             ed::EndPin();
             ed::BeginPin(nodeB_InputPinId2, ed::PinKind::Input);
-                ImGui::Text("-> In2");
+            ImGui::Text("-> In2");
             ed::EndPin();
-            }
-            ImGui::PopItemWidth();
-
-            if(ImGui::CollapsingHeader("port2"))
-            {
-
-
+            ed::EndPort();
+            ed::BeginPort(portId, ed::PortKind::Input);
             ed::BeginPin(nodeB_InputPinId3, ed::PinKind::Input);
                 ImGui::Text("-> In3");
             ed::EndPin();
+            ed::EndPort();
             ed::BeginPin(nodeB_InputPinId4, ed::PinKind::Input);
                 ImGui::Text("-> In4");
             ed::EndPin();
-            }
-
+        
             if(ImGui::BeginTable("port3",1,ImGuiTableFlags_BordersOuter | ImGuiTableFlags_SizingStretchProp))
             {
                 ImGui::TableNextColumn();

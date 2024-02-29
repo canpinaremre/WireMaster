@@ -18,13 +18,13 @@ include_directories(src/Application)
 
 
 
-file(COPY "libs/imgui_node_editor/examples/application/include/application.h" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
-file(COPY "libs/imgui_node_editor/examples/application/source/application.cpp" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
-file(COPY "libs/imgui_node_editor/examples/application/source/setup.h" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
-file(COPY "libs/imgui_node_editor/examples/application/source/renderer.h" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
-file(COPY "libs/imgui_node_editor/examples/application/source/renderer_ogl3.cpp" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
-file(COPY "libs/imgui_node_editor/examples/application/source/platform.h" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
-file(COPY "libs/imgui_node_editor/examples/application/source/platform_glfw.cpp" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
+# file(COPY "libs/imgui_node_editor/examples/application/include/application.h" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
+# file(COPY "libs/imgui_node_editor/examples/application/source/application.cpp" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
+# file(COPY "libs/imgui_node_editor/examples/application/source/setup.h" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
+# file(COPY "libs/imgui_node_editor/examples/application/source/renderer.h" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
+# file(COPY "libs/imgui_node_editor/examples/application/source/renderer_ogl3.cpp" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
+# file(COPY "libs/imgui_node_editor/examples/application/source/platform.h" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
+# file(COPY "libs/imgui_node_editor/examples/application/source/platform_glfw.cpp" DESTINATION ${PROJECT_SOURCE_DIR}/src/Application)
 
 
 file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
