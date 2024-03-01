@@ -124,6 +124,7 @@ public:
     void AddPort(AvionicPort port, ed::PortKind kind);
     void AddPort(AvionicPort port);
     ed::NodeId getID() { return ID; }
+    std::string getName() { return Name; }
 
 private:
     std::string Name;

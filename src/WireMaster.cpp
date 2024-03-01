@@ -1,4 +1,6 @@
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "WireMaster.h"
+
 
 
 void WireMaster::OnStart()
@@ -30,16 +32,42 @@ void WireMaster::ImGuiEx_EndColumn()
 {
     ImGui::EndGroup();
 }
+bool WireMaster::Splitter(bool split_vertically, float thickness, float* size1, float* size2, float min_size1, float min_size2, float splitter_long_axis_size )
+{
+    using namespace ImGui;
+    ImGuiContext& g = *GImGui;
+    ImGuiWindow* window = g.CurrentWindow;
+    ImGuiID id = window->GetID("##Splitter");
+    ImRect bb;
+    bb.Min = window->DC.CursorPos + (split_vertically ? ImVec2(*size1, 0.0f) : ImVec2(0.0f, *size1));
+    bb.Max = bb.Min + CalcItemSize(split_vertically ? ImVec2(thickness, splitter_long_axis_size) : ImVec2(splitter_long_axis_size, thickness), 0.0f, 0.0f);
+    return SplitterBehavior(bb, id, split_vertically ? ImGuiAxis_X : ImGuiAxis_Y, size1, size2, min_size1, min_size2, 0.0f);
+}
 
 void WireMaster::OnFrame(float deltaTime) 
 {
+    
+
+
     auto& io = ImGui::GetIO();
     ImGui::Text("FPS: %.2f (%.2gms)", io.Framerate, io.Framerate ? 1000.0f / io.Framerate : 0.0f);
     ImGui::Separator();
     ed::SetCurrentEditor(m_Context);
+    
+    static float leftPaneWidth  = 400.0f;
+    static float rightPaneWidth = 800.0f;
+    Splitter(true, 4.0f, &leftPaneWidth, &rightPaneWidth, 50.0f, 50.0f);
+    ShowLeftPane(leftPaneWidth - 4.0f);
+    ImGui::SameLine(0.0f, 12.0f);
+
+    // Handle key and short cut actions
+    HandleActions();
+
+
     // Start interaction with editor.
     ed::Begin("My Editor", ImVec2(0.0, 0.0f));
 
+    // Draw avionics
     for (auto &avs : AvionicList) 
     {
         avs.Build();
@@ -177,4 +205,104 @@ void WireMaster::initAvionics()
     AvionicList.push_back(Avionic1);
     AvionicList.push_back(Avionic2);
     AvionicList.push_back(Avionic3);
+}
+
+
+void WireMaster::ShowLeftPane(float paneWidth)
+{
+    auto& io = ImGui::GetIO();
+    ImGui::BeginChild("Control Pannel", ImVec2(paneWidth, 0));
+    paneWidth = ImGui::GetContentRegionAvail().x;
+    static bool showStyleEditor = false;
+
+    //------------------------------------------------------------
+    ImGui::BeginHorizontal("Style Editor", ImVec2(paneWidth, 0));
+
+    ImGui::Spring(0.0f, 0.0f);
+    if (ImGui::Button("Show Diagram"))
+        ed::NavigateToContent();
+    ImGui::Spring(0.0f);
+    if (ImGui::Button("Highlight Flow"))
+    {
+        // // TODO highlight only selected link
+        // for (auto& link : m_Links)
+        //     ed::Flow(link.ID);
+    }
+
+    ImGui::Spring();
+
+    // TODO excel/XML export
+    if (ImGui::Button("Configuration"))
+        showStyleEditor = true;
+
+    ImGui::EndHorizontal();
+    //------------------------------------------------------------
+    // TODO add to menubar
+    // if (showStyleEditor)
+    //     ShowStyleEditor(&showStyleEditor);
+
+
+    std::vector<ed::NodeId> selectedNodes;
+    std::vector<ed::LinkId> selectedLinks;
+    selectedNodes.resize(ed::GetSelectedObjectCount());
+    selectedLinks.resize(ed::GetSelectedObjectCount());
+    int nodeCount = ed::GetSelectedNodes(selectedNodes.data(), static_cast<int>(selectedNodes.size()));
+    int linkCount = ed::GetSelectedLinks(selectedLinks.data(), static_cast<int>(selectedLinks.size()));
+    selectedNodes.resize(nodeCount);
+    selectedLinks.resize(linkCount);
+    // int saveIconWidth     = GetTextureWidth(m_SaveIcon);
+    // int saveIconHeight    = GetTextureWidth(m_SaveIcon);
+    // int restoreIconWidth  = GetTextureWidth(m_RestoreIcon);
+    // int restoreIconHeight = GetTextureWidth(m_RestoreIcon);
+
+    ImGui::GetWindowDrawList()->AddRectFilled(
+        ImGui::GetCursorScreenPos(),
+        ImGui::GetCursorScreenPos() + ImVec2(paneWidth, ImGui::GetTextLineHeight()),
+        ImColor(ImGui::GetStyle().Colors[ImGuiCol_HeaderActive]), ImGui::GetTextLineHeight() * 0.25f);
+    ImGui::Spacing(); ImGui::SameLine();
+    ImGui::TextUnformatted("Avionics");
+    ImGui::Indent();
+    for (auto& avionic : AvionicList)
+    {
+        ImGui::PushID(avionic.getID().AsPointer());
+
+        bool isSelected = std::find(selectedNodes.begin(), selectedNodes.end(), avionic.getID()) != selectedNodes.end();
+        ImGui::SetNextItemAllowOverlap();
+        if (ImGui::Selectable((avionic.getName() + "##" + std::to_string(reinterpret_cast<uintptr_t>(avionic.getID().AsPointer()))).c_str(), &isSelected))
+        {
+            if (io.KeyCtrl)
+            {
+                if (isSelected)
+                    ed::SelectNode(avionic.getID(), true);
+                else
+                    ed::DeselectNode(avionic.getID());
+            }
+            else
+                ed::SelectNode(avionic.getID(), false);
+            ed::NavigateToSelection();
+        }
+
+        ImGui::PopID();
+    }
+    
+    ImGui::Unindent();
+
+    ImGui::GetWindowDrawList()->AddRectFilled(
+    ImGui::GetCursorScreenPos(),
+    ImGui::GetCursorScreenPos() + ImVec2(paneWidth, ImGui::GetTextLineHeight()),
+    ImColor(ImGui::GetStyle().Colors[ImGuiCol_HeaderActive]), ImGui::GetTextLineHeight() * 0.25f);
+    ImGui::Spacing(); ImGui::SameLine();
+
+    ImGui::TextUnformatted("Selected");
+    ImGui::Indent();
+    // TODO isim yaz
+    for (int i = 0; i < nodeCount; ++i) ImGui::Text("Birim (%p)", selectedNodes[i].AsPointer());
+    for (int i = 0; i < linkCount; ++i) ImGui::Text("Bağlantı (%p)", selectedLinks[i].AsPointer());
+    ImGui::Unindent();
+    // if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
+    //     for (auto& link : m_Links)
+    //         ed::Flow(link.ID);
+    
+
+    ImGui::EndChild();
 }

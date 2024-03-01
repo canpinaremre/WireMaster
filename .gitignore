@@ -1,6 +1,8 @@
 build/*
 .vscode/*
 bin/
+*.json
+*.ini
 
 [Bb][Uu][Ii][Ll][Dd]
 
