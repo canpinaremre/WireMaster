@@ -6,4 +6,5 @@
 
 namespace ed = ax::NodeEditor;
 
-void HandleActions();
+void HandleKeyActions();
+void HandleNodeActions();

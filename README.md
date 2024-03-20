@@ -4,10 +4,10 @@
 
 
 # TODOs
-- Fix pin directions
 - New node struct for interconnect element
 - Right-click "add new Avionic"
     - Right-click "add port", "add pin"
+- Bug:Can not access port context menu
 - Delete nodes
 - Right-click to nodes and link
 - Improve Avionic build, nicer header and ports

@@ -61,7 +61,7 @@ void WireMaster::OnFrame(float deltaTime)
     ImGui::SameLine(0.0f, 12.0f);
 
     // Handle key and short cut actions
-    HandleActions();
+    HandleKeyActions();
 
 
     // Start interaction with editor.
@@ -80,6 +80,8 @@ void WireMaster::OnFrame(float deltaTime)
     // 2) Handle interactions
     //
     // Handle creation action, returns true if editor want to create new object (node or link)
+    HandleNodeActions();
+
     if (ed::BeginCreate())
     {
         ed::PinId inputPinId, outputPinId;

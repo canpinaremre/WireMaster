@@ -100,6 +100,8 @@ void AvionicPort::AddPin(AvionicPin pin)
 {
     pin.setPort(this);
 
+    pin.setPinKind(this->getPortKind() == ed::PortKind::Input ? ed::PinKind::Input : ed::PinKind::Output);
+
     Pins.push_back(pin);
 }
 

@@ -48,6 +48,7 @@ public:
     ed::PinId getID() { return ID; }
     ed::PortId getPortID() { return Port; }
     ed::NodeId getNodeID() { return Node; }
+    ed::PinKind getPinKind() { return Kind; }
     
     void setPort(ed::PortId portID)
     {
@@ -60,6 +61,11 @@ public:
     }
 
     void setPort(AvionicPort *port);
+
+    void setPinKind(ed::PinKind kind)
+    {
+        Kind = kind;
+    }
 
 private:
     PinType Type;
