@@ -1,5 +1,9 @@
 #include "Avionic.h"
 
+std::vector<Avionic> AvionicList;
+int uniqId = 1;
+
+
 void Avionic::AvionicBeginColumn()
 {
     ImGui::BeginGroup();
@@ -28,21 +32,29 @@ void Avionic::Build()
 
     ed::BeginNode(ID);
 
-    ImGui::Text(Name.c_str());
         
-    AvionicBeginColumn();
     // Input
+    AvionicBeginColumn();
+    // Empty space for name
+    ImGui::Text(" ");
+    // Draw ports
     for (auto &ins : InputPorts) 
     {
         ins.Build();
     }
 
-    AvionicNextColumn();
     // Body
-    ImGui::Text("Deneme");
-
     AvionicNextColumn();
+    // Name
+    ImGui::Text(Name.c_str());
+    // Body text
+    ImGui::Text(bodyText.c_str());
+
     // Output
+    AvionicNextColumn();
+    // Empty space for name
+    ImGui::Text(" ");
+    // Draw ports
     for (auto &outs : OutputPorts) 
     {
         outs.Build();
@@ -70,6 +82,7 @@ void AvionicPin::Build()
     ImGui::Text(Name.c_str());
     ed::EndPin();
 }
+
 
 void Avionic::AddPort(AvionicPort port, ed::PortKind kind)
 {

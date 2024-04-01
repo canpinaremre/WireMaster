@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __AVIONIC_H__
+#define __AVIONIC_H__
 
 # include <imgui.h>
 # include <imgui_node_editor.h>
@@ -132,12 +133,16 @@ public:
     ed::NodeId getID() { return ID; }
     std::string getName() { return Name; }
 
+    void setBodyText(std::string text) { bodyText = text; }
+    std::string getBodyText() { return bodyText; }
+
 private:
     std::string Name;
     ed::NodeId ID;
     // TODO type?
     std::vector<AvionicPort> InputPorts;
     std::vector<AvionicPort> OutputPorts;
+    std::string bodyText;
     ImColor Color;
     ImVec2 Position;
     bool m_FirstFrame = true;
@@ -179,3 +184,5 @@ class AvionicLink
     {
     }
 };
+
+#endif // __AVIONIC_H__

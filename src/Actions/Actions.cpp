@@ -1,5 +1,7 @@
 #include <Actions.h>
 
+extern std::vector<Avionic> AvionicList;
+extern int uniqId;
 
 void HandleKeyActions()
 {
@@ -21,6 +23,8 @@ void HandleNodeActions()
 
 
     auto openPopupPosition = ImGui::GetMousePos();
+    static auto newNodePostion = openPopupPosition;
+
     ed::Suspend();
     if (ed::ShowNodeContextMenu(&contextNodeId))
         ImGui::OpenPopup("POP_NodeContextMenu");
@@ -31,22 +35,34 @@ void HandleNodeActions()
     else if (ed::ShowPortContextMenu(&contextPortId))
         ImGui::OpenPopup("POP_PortContextMenu");
     else if (ed::ShowBackgroundContextMenu())
+    {
         ImGui::OpenPopup("POP_BackgroundContextMenu");
+        newNodePostion = openPopupPosition;
+    }
+        
 
     ed::Resume();
 
 
-    
+    ed::Suspend();
     if (ImGui::BeginPopup("POP_BackgroundContextMenu"))
     {
-        auto newNodePostion = openPopupPosition;
         if (ImGui::MenuItem("BackgroundContextMenu"))
         {
-
+            
         }
-
+        if (ImGui::MenuItem("Add New Empty Avionic"))
+        {
+            Avionic av(uniqId++, "Empty Avionic", newNodePostion);
+            AvionicList.push_back(av);
+        }
+        if (ImGui::MenuItem("Add Avionic From Library"))
+        {
+            // TODO add from library
+        }
         ImGui::EndPopup();
     }
+    ed::Resume();
 
     if (ImGui::BeginPopup("POP_PortContextMenu"))
     {
@@ -72,6 +88,10 @@ void HandleNodeActions()
         if (ImGui::MenuItem("NodeContextMenu"))
         {
 
+        }
+        if (ImGui::MenuItem("Add New Empty Port"))
+        {
+            
         }
         ImGui::EndPopup();
     }

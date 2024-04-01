@@ -1,8 +1,11 @@
+#ifndef __WIREMASTER_H__
+#define __WIREMASTER_H__
+
 # include <imgui.h>
 # include <imgui_node_editor.h>
 # include <application.h>
 # include <imgui_internal.h>
-#include <algorithm>
+# include <algorithm>
 
 #include <Avionic.h>
 #include <Actions.h>
@@ -12,8 +15,6 @@ namespace ed = ax::NodeEditor;
 struct WireMaster : public Application
 {
 
-    int uniqId = 1;
-    std::vector<Avionic> AvionicList;
 
     void initAvionics();
     void ShowLeftPane(float paneWidth);
@@ -46,3 +47,4 @@ struct WireMaster : public Application
 };
 
 
+#endif // __WIREMASTER_H__

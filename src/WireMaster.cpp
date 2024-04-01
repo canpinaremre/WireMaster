@@ -1,7 +1,8 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "WireMaster.h"
 
-
+extern std::vector<Avionic> AvionicList;
+extern int uniqId;
 
 void WireMaster::OnStart()
 {
@@ -209,13 +210,14 @@ void WireMaster::initAvionics()
                 port5.AddPin(pin11);
         Avionic3.AddPort(port5);
     //------------------------------------------------
+    Avionic Avionic4(uniqId++, "Avionic4", ImVec2(333, 333));
+        AvionicPort port6(uniqId++,"port6", ed::PortKind::Input);
+        Avionic4.AddPort(port6);
+    //------------------------------------------------
 
 
-
-
-
-
-
+    Avionic1.setBodyText("Avionic 1");
+    Avionic3.setBodyText("Test");
 
 
 
@@ -223,6 +225,7 @@ void WireMaster::initAvionics()
     AvionicList.push_back(Avionic1);
     AvionicList.push_back(Avionic2);
     AvionicList.push_back(Avionic3);
+    AvionicList.push_back(Avionic4);
 }
 
 
