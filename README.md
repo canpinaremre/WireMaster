@@ -5,10 +5,8 @@
 
 # TODOs
 - New node struct for interconnect element
-- Right-click "add new Avionic"
+- Bug: Can not access port context menu
     - Right-click "add port", "add pin"
-- Bug:Can not access port context menu
-- Delete nodes
 - Right-click to nodes and link
 - Improve Avionic build, nicer header and ports
 - Option to hide link and pins
