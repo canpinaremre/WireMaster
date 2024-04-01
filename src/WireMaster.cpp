@@ -138,6 +138,22 @@ void WireMaster::OnFrame(float deltaTime)
             // You may reject link deletion by calling:
             // ed::RejectDeletedItem();
         }
+        // Loop over the AvionicList to find deleted nodes
+        ed::NodeId nodeId = 0;
+        while (ed::QueryDeletedNode(&nodeId))
+        {
+            if (ed::AcceptDeletedItem())
+            {
+                for (auto it = AvionicList.begin(); it != AvionicList.end(); ) 
+                {
+                    if (it->getID() == nodeId) {
+                        it = AvionicList.erase(it); // Delete the element and advance the iterator
+                    } else {
+                        ++it; // Move to the next element
+                    }
+                }
+            }
+        }
     }
     ed::EndDelete(); // Wrap up deletion action
     // End of interaction with editor.
