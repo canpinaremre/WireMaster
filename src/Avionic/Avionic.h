@@ -170,19 +170,50 @@ private:
 
 };
 
-class AvionicLink
+class Wire
 {
-    ed::LinkId ID;
 
+private:
+    ed::LinkId ID;
     ed::PinId StartPinID;
     ed::PinId EndPinID;
 
     ImColor Color;
-
-    AvionicLink(ed::LinkId id, ed::PinId startPinId, ed::PinId endPinId):
-        ID(id), StartPinID(startPinId), EndPinID(endPinId), Color(255, 255, 255)
-    {
-    }
 };
+
+class TwistPairs
+{
+private:
+    std::vector<ed::LinkId> TwistedWires;
+};
+
+class ShieldPairs
+{
+private:
+    std::vector<ed::LinkId> ShieldedWires;
+};
+
+class AvionicBus
+{
+
+private:
+    std::string Name;
+    ed::LinkId ID;
+
+    std::vector<Wire> Wires;
+    std::vector<ed::PortId> ConnectedPorts;
+
+    std::vector<ShieldPairs> BusShield;
+    std::vector<TwistPairs> BusTwist;
+
+
+public:
+    ed::LinkId getID() { return ID; }
+    std::string getName() { return Name; }
+
+};
+
+
+
 
 #endif // __AVIONIC_H__

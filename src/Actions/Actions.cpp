@@ -79,6 +79,10 @@ void HandleNodeActions()
         {
 
         }
+        if(ImGui::MenuItem("Bus Properties"))
+        {
+            
+        }
         ImGui::EndPopup();
     }
 

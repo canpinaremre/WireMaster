@@ -17,6 +17,7 @@ include_directories(src)
 include_directories(src/Application)
 include_directories(src/Avionic)
 include_directories(src/Actions)
+include_directories(src/BusConfig)
 
 
 
